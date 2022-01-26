@@ -1,9 +1,9 @@
-document.addEventListener("DOMContentLoaded", function() {
-    let buttons=document.getElementsByTagName("button");
+document.addEventListener("DOMContentLoaded", function () {
+    let buttons = document.getElementsByTagName("button");
 
     for (let button of buttons) {
-        button.addEventListener("click",function() {
-            if (this.getAttribute("data-type")==="submit") {
+        button.addEventListener("click", function () {
+            if (this.getAttribute("data-type") === "submit") {
                 checkAnswer();
             } else {
                 let gameType = this.getAttribute("data-type");
@@ -12,27 +12,37 @@ document.addEventListener("DOMContentLoaded", function() {
         })
     }
 
+    document.getElementById("answer-box").addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            checkAnswer();
+        }
+    })
+
     runGame("addition");
 
 })
-
 
 /** The main game loop called when game is first loaded
  * and after the user's answer has been processed
  */
 function runGame(gameType) {
-    // Creates two random numbers between 1 and 25
-    let num1= Math.floor(Math.random()*25)+1;
-    let num2= Math.floor(Math.random()*25)+1;
 
-    if (gameType==="addition") {
-        displayAdditionQuestion(num1,num2);
-    } else if (gameType==="multiply") {
-            displayMultiplyQuestion(num1,num2);
-        } else if (gameType==="subtract") {
-            displaySubtractQuestion(num1, num2);
-        } else { 
-                alert(`Unknown game type: ${gameType}`);
+    document.getElementById("answer-box").value = "";
+    document.getElementById("answer-box").focus();
+
+
+    // Creates two random numbers between 1 and 25
+    let num1 = Math.floor(Math.random() * 25) + 1;
+    let num2 = Math.floor(Math.random() * 25) + 1;
+
+    if (gameType === "addition") {
+        displayAdditionQuestion(num1, num2);
+    } else if (gameType === "multiply") {
+        displayMultiplyQuestion(num1, num2);
+    } else if (gameType === "subtract") {
+        displaySubtractQuestion(num1, num2);
+    } else {
+        alert(`Unknown game type: ${gameType}`);
         throw `Unknown game type: ${gameType}. Aborting!`;
     }
 }
@@ -42,15 +52,15 @@ function checkAnswer() {
     let calculatedAnswer = calculateCorrectAnswer();
     let isCorrect = userAnswer === calculatedAnswer[0];
 
-    if(isCorrect) {
+    if (isCorrect) {
         alert("Hey Gary! You got it mwnci right! :D");
         incrementScore();
     } else {
-    alert(`Argh! You answered ${userAnswer}. The correct answer was ${calculatedAnswer[0]}, try again! :D`);
-    incrementWrongAnswer();
-}
+        alert(`Argh! You answered ${userAnswer}. The correct answer was ${calculatedAnswer[0]}, try again! :D`);
+        incrementWrongAnswer();
+    }
 
-runGame(calculatedAnswer[1]);
+    runGame(calculatedAnswer[1]);
 }
 
 function calculateCorrectAnswer() {
@@ -65,7 +75,7 @@ function calculateCorrectAnswer() {
     } else if (operator === "-") {
         return [operand1 - operand2, "subtract"];
     } else {
-        alert (`Unimplemented operator ${operator}`);
+        alert(`Unimplemented operator ${operator}`);
         throw `Unimplemented operator ${operator}. Aborting!`
     }
 }
